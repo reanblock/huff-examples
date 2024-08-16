@@ -21,9 +21,26 @@ contract SimpleStoreTest is Test {
         console.log(simpleStore.getValue());
         assertEq(value, simpleStore.getValue());
     }
+
+    function testCheckRequire() public {
+        vm.expectRevert();
+        // NOTE: cannot get either of the below specific checks to work!
+        // vm.expectRevert("There was an error");
+        // vm.expectRevert(abi.encodeWithSignature("Error(string)"));
+        simpleStore.checkRequire();
+    }
+
+    function testGetValue2() public {
+        uint256 value = 24;
+        simpleStore.setValue(value);
+        uint256 v2 = simpleStore.getValue2();
+        assertEq(v2, value * 2);
+    }
 }
 
 interface SimpleStore {
     function setValue(uint256) external;
     function getValue() external returns (uint256);
+    function getValue2() external returns (uint256);
+    function checkRequire() external returns (bool);
 }

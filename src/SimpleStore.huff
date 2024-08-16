@@ -1,18 +1,63 @@
 /* Interface */
 #define function setValue(uint256) nonpayable returns ()
 #define function getValue() view returns (uint256)
+#define function getValue2() view returns (uint256)
+#define function checkRequire() nonpayable returns (bool)
+
+// Define our custom error
+#define error Error(string)
 
 /* Storage Slots */
 #define constant VALUE_LOCATION = FREE_STORAGE_POINTER()
+
+/* Constant */
+#define constant ERROR_MESSAGE = 0x54686572652077617320616E206572726F72 // "There was an error"
+
+#define macro REQUIRE() = takes (3) returns (0) {
+    // Input stack:          [condition, message_length, message]
+    continue jumpi        // [message_length, message]
+
+    __ERROR(Error)        // [error_selector, message_length, message]
+    0x00 mstore           // [message_length, message]
+    0x20 0x04 mstore      // [message_length, message]
+    0x24 mstore           // [message]
+    0x44 mstore           // []
+
+    0x64 0x00 revert
+
+    continue:
+        pop               // []
+}
 
 /* Methods */
 #define macro SET_VALUE() = takes (0) returns (0) {
     0x04 calldataload   // [value]
     [VALUE_LOCATION]    // [ptr, value]
-    sstore              // []
+    sstore              // [] d
 
     // End Execution
     stop
+}
+
+#define macro CHECK_REQUIRE() = takes (0) returns (0) {
+    [ERROR_MESSAGE] 0x20 0x00
+    REQUIRE()
+    // return true
+    0x01 0x00 mstore
+    0x20 0x00 return
+}
+
+#define macro GET_VALUE2() = takes (0) returns (0) {
+    // Load value from storage.
+    [VALUE_LOCATION]   // [ptr]
+    sload                // [value]
+
+    // Store value in memory.
+    0x02 mul
+    0x00 mstore
+
+    // Return value
+    0x20 0x00 return
 }
 
 #define macro GET_VALUE() = takes (0) returns (0) {
@@ -30,7 +75,12 @@
 #define macro MAIN() = takes (0) returns (0) {
     // Identify which function is being called.
     0x00 calldataload 0xE0 shr
+    // dup1 __FUNC_SIG(permit)             eq permitJump           jumpi
+    // dup1 __FUNC_SIG(nonces)             eq noncesJump           jumpi
+
     dup1 __FUNC_SIG(setValue) eq set jumpi
+    dup1 __FUNC_SIG(checkRequire) eq checkRequire jumpi
+    dup1 __FUNC_SIG(getValue2) eq get2 jumpi
     __FUNC_SIG(getValue) eq get jumpi
 
     0x00 0x00 revert
@@ -39,5 +89,9 @@
         SET_VALUE()
     get:
         GET_VALUE()
+    checkRequire:
+        CHECK_REQUIRE()
+    get2:
+        GET_VALUE2()
 
 }
