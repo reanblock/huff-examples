@@ -4,8 +4,54 @@
 
 Versatile Huff Project Template using Foundry.
 
+## Huff Console, VS Code Extentions, Debugger and Playground
 
-## Getting Started
+- Use [Huff Console](https://github.com/AmadiMichael/Huff-Console)
+- Use [Huff VS Code Extention](https://marketplace.visualstudio.com/items?itemName=huff-language.huff-language)
+- Use [HEVM](https://github.com/ethereum/hevm) to use with the with the Huff debugger as required 
+- Use [HEVM Dev](https://hevm.dev/getting-started.html) to learn more about HEVM useage
+- Use [Huff Playground](https://oguimbal.github.io/huff/)
+- Use [Huff HorseStore](https://www.youtube.com/watch?v=Yn58Jmkf2ow)
+
+## HEVM
+
+### Installation
+
+Easiest way to install is download the binary from the latest release, convert to executable and move to `/usr/local/bin/` folder:
+
+- Download release 0.53.0 binary [here](https://github.com/ethereum/hevm/releases/tag/release%2F0.53.0)
+- Rename file to `hevm` using `mv hevm-x86_64-macos hevm`
+- Add executable permisson using `chmod +x hevm`
+- Move to `/usr/local/bin/` using `mv hevm /usr/local/bin/`
+- Confirm install by starting new terminal and running `hevm version`
+
+### Compile Huff and run in HEVM
+
+- Compile `Example.huff` using `huffc src/example.huff --bin-runtime` to get the runtime bytecode
+- Run the bytecode in `hevm` like so:
+
+```
+hevm exec --code 0x600435602435015f5260205ff3                   \
+        --address 0546efe03e2501b38669f6f0cee94450a03686be8a    \
+        --caller 0x00000000000000000000000000000000000000420    \
+        --gas 0xffffffff                                        \
+        --debug                                                 \
+        --calldata 0x771602f700000000000000000000000000000000000000000000000000000000000000050000000000000000000000000000000000000000000000000000000000000006
+```
+
+In the above `hevm exec` example
+
+- `--code` is the compiled runtime bytecode from compiling `Example.huff` using `huffc`.
+- `--calldata` is the function signature of `add(uint256,uint256)` which is `0x771602f7` followed by the two abi encoded uint256 values which are 5 & 6. The calldata was generated using `cast cd "function add(uint256,uint256)" 0x5 0x6`.
+- The other parameters should be self explanatory.
+
+After running the above `hevm` command the output should be as follows which is `0x0b` in hex (11 in decimal).
+
+```
+ "Return: 0x000000000000000000000000000000000000000000000000000000000000000b"
+```
+
+## HUFF Template 
 
 ### Requirements
 
