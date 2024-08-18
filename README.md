@@ -6,12 +6,12 @@ Versatile Huff Project Template using Foundry.
 
 ## Huff Console, VS Code Extentions, Debugger and Playground
 
-- Use [Huff Console](https://github.com/AmadiMichael/Huff-Console)
+- Use [Huff Console](https://github.com/AmadiMichael/Huff-Console) 
 - Use [Huff VS Code Extention](https://marketplace.visualstudio.com/items?itemName=huff-language.huff-language)
 - Use [HEVM](https://github.com/ethereum/hevm) to use with the with the Huff debugger as required 
 - Use [HEVM Dev](https://hevm.dev/getting-started.html) to learn more about HEVM useage
 - Use [Huff Playground](https://oguimbal.github.io/huff/)
-- Use [Huff HorseStore](https://www.youtube.com/watch?v=Yn58Jmkf2ow)
+- Use [Huff HorseStore](https://www.youtube.com/watch?v=Yn58Jmkf2ow) - original repo [here](https://github.com/Cyfrin/1-horse-store-s23)
 
 ## HEVM
 
@@ -51,7 +51,7 @@ After running the above `hevm` command the output should be as follows which is 
  "Return: 0x000000000000000000000000000000000000000000000000000000000000000b"
 ```
 
-## HUFF Template 
+## Huff Template 
 
 ### Requirements
 
